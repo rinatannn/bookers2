@@ -1,0 +1,31 @@
+<div class="container mt-5">
+ <div class="row justify-content-center">
+  <div class="col-md-6">
+   <h2 class="mb-4">Sign up</h2>
+   
+   <%= form_with model: @user, url: users_path, local: true do |f| %>
+    <div class="mb-3">
+     <%= f.label :name, "Name", class: "form-label" %>
+     <%= f.text_field :name, class: "form-control" %>
+    </div>
+    
+    <div class="mb-3">
+     <%= f.label :introduction, "Introduction", class: "form-label" %>
+     <%= f.text_area :introduction, class: "form-control", rows: 3 %>
+    </div>
+    
+    <div class="mb-3">
+     <%= f.label :password, "Password", class: "form-label"%>
+     <%= f.password_field :password, class: "form-control" %>
+    </div>
+    
+    <div class="mb-3">
+     <%= f.label :password_confirmation, "Password Confirmation", class: "form-label" %>
+     <%= f.password_field :password_confirmation, class: "form-control" %>
+    </div>
+
+    <%= f.submit "Sign up", class: "btn btn-success" %>
+   <% end %>
+  </div>
+ </div>
+</div>
