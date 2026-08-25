@@ -1,19 +1,24 @@
 Rails.application.configure do
   config.cache_classes = true
-  config.eager_load = false
+  config.eager_load = ENV["CI"].present?
   config.public_file_server.enabled = true
   config.public_file_server.headers = {
-    'Cache-Control' => "public, max-age=#{1.hour.to_i}"
+    "Cache-Control" => "public, max-age=#{1.hour.to_i}"
   }
-  config.consider_all_requests_local       = true
+
+  config.consider_all_requests_local = true
   config.action_controller.perform_caching = false
   config.cache_store = :null_store
+
   config.action_dispatch.show_exceptions = false
   config.action_controller.allow_forgery_protection = false
   config.active_storage.service = :test
   config.action_mailer.perform_caching = false
   config.action_mailer.delivery_method = :test
-  config.action_mailer.default_url_options = { host: 'example.com' }
-  config.active_support.deprecation = :silence
-  config.action_view.raise_on_missing_translations = true
+  config.active_support.deprecation = :stderr
+  config.active_support.disallowed_deprecation = :raise
+  config.active_support.disallowed_deprecation_categories = []
+
+  config.web_console.development_only = true if defined?(WebConsole)
+
 end

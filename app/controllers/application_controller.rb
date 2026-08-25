@@ -1,17 +1,25 @@
 class ApplicationController < ActionController::Base
-  before_action :configure_permitted_parameters, if: :devise_controller?
+  helper_method :current_user, :user_signed_in?
 
-  def after_sign_in_path_for(resource)
-    user_path(resource.id)
+  def current_user
+    @current_user ||= begin
+      if Current.session&.user
+        Current.session.user
+      elsif cookies.signed[:session_id]
+        Session.find_by(id: cookies.signed[:session_id])&.user
+      elsif session[:user_id]
+        User.find_by(id: session[:user_id])
+      end
+    end
   end
 
-  def after_sign_out_path_for(resource)
-    root_path
+  def user_signed_in?
+    current_user.present?
   end
 
-  protected
-
-  def configure_permitted_parameters
-    devise_parameter_sanitizer.permit(:sign_up, keys: [:email])
+  def authenticate_user!
+    unless user_signed_in?
+      redirect_to new_session_path
+    end
   end
 end

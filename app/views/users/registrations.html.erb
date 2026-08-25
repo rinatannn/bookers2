@@ -1,0 +1,55 @@
+<div class="container">
+  <div class="row">
+    <div class="col-sm-12 col-md-8 col-lg-5 px-5 px-sm-0 mx-auto">
+      <h2>Sign up</h2>
+
+      <% if @user.errors.any? %>
+        <div class="alert alert-danger">
+          <h3>
+            <%= @user.errors.count %> error prohibited this user from being saved:
+          </h3>
+
+          <ul>
+            <% @user.errors.full_messages.each do |message| %>
+              <li><%= message %></li>
+            <% end %>
+          </ul>
+        </div>
+      <% end %>
+
+      <%= form_with model: @user, url: users_path, local: true do |f| %>
+
+        <div class="field mb-3">
+          <%= f.label :name, "Name" %><br>
+          <%= f.text_field :name, class: "name form-control" %>
+        </div>
+
+        <div class="field mb-3">
+          <%= f.label :email, "Email" %><br>
+          <%= f.email_field :email, class: "email form-control" %>
+        </div>
+
+        <div class="field mb-3">
+          <%= f.label :email_address, "Email address" %><br>
+          <%= f.email_field :email_address, class: "email_address form-control" %>
+        </div>
+
+        <div class="field mb-3">
+          <%= f.label :password, "Password" %><br>
+          <%= f.password_field :password, class: "password form-control" %>
+        </div>
+
+        <div class="field mb-3">
+          <%= f.label :password_confirmation, "Password confirmation" %><br>
+          <%= f.password_field :password_confirmation,
+                               class: "password_confirm form-control" %>
+        </div>
+
+        <div class="actions">
+          <%= f.submit "Sign up", class: "btn btn-success" %>
+        </div>
+
+      <% end %>
+    </div>
+  </div>
+</div>

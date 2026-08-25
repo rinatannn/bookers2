@@ -1,7 +1,17 @@
 Rails.application.routes.draw do
-  devise_for :users
-  root to: 'homes#top'
-  get 'home/about', to: 'homes#about', as: 'about'
+  root to: "homes#top"
+
+  get "home/about", to: "homes#about", as: "about"
+
+  get "/users/sign_in", to: "sessions#new", as: :new_user_session
+get "/session/new", to: "sessions#new", as: :new_session
+post "/users/sign_in", to: "sessions#create", as: :user_session
+
+get "/users/sign_out", to: "sessions#destroy", as: :destroy_user_session
+
+get "/users/sign_up", to: "users#registrations", as: :new_user_registration
+get "/users/sign_up", to: "users#registrations", as: :new_user
+
   resources :books, only: [:index, :show, :edit, :create, :update, :destroy]
-  resources :users, only: [:index, :show, :edit, :update]
+  resources :users, only: [:index, :show, :create, :edit, :update]
 end

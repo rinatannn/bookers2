@@ -1,14 +1,15 @@
 class SessionsController < ApplicationController
   def new
-
   end
 
   def create
-    user = User.find_by(name: params[:name])
-    if user && user.authenticate(params[:password])
+    user = User.find_by(name: params.dig(:user, :name))
+
+    if user && user.authenticate(params.dig(:user, :password))
       session[:user_id] = user.id
-      redirect_to root_path, notice: "Welcome! You have signed in successfully."
+      redirect_to user_path(user), notice: "Welcome! You have signed in successfully."
     else
+      flash.now[:alert] = "Invalid name or password"
       render :new
     end
   end
