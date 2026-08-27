@@ -3,22 +3,31 @@ Rails.application.routes.draw do
 
   get "home/about", to: "homes#about", as: "about"
 
+  # ログイン・ログアウト
   get "/users/sign_in", to: "sessions#new", as: :new_user_session
   get "/session/new", to: "sessions#new", as: :new_session
   post "/users/sign_in", to: "sessions#create", as: :user_session
-
   get "/users/sign_out", to: "sessions#destroy", as: :destroy_user_session
 
+  # 新規登録
   get "/users/sign_up", to: "users#registrations", as: :new_user_registration
   get "/users/sign_up", to: "users#registrations", as: :new_user
 
+  # 検索
   get "/search", to: "searches#search", as: :search
 
+  # 投稿
   resources :books, only: [:index, :show, :edit, :create, :update, :destroy] do
     resource :favorite, only: [:create, :destroy]
     resources :book_comments, only: [:create, :destroy]
   end
 
+ # グループ
+resources :groups do
+  resource :group_users, only: [:create, :destroy]
+end
+
+  # ユーザー
   resources :users, only: [:index, :show, :create, :edit, :update] do
     resource :relationships, only: [:create, :destroy]
 
@@ -31,6 +40,7 @@ Rails.application.routes.draw do
     resources :rooms, only: [:create]
   end
 
+  # DM
   resources :rooms, only: [:show] do
     resources :messages, only: [:create]
   end

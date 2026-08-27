@@ -6,6 +6,10 @@ class User < ApplicationRecord
   has_many :favorite_books, through: :favorites, source: :book
   has_many :book_comments, dependent: :destroy
   has_many :sessions, dependent: :destroy
+  has_many :owned_groups, class_name: "Group", foreign_key: "owner_id", dependent: :destroy
+
+  has_many :group_users, dependent: :destroy
+  has_many :groups, through: :group_users
 
   # DM
   has_many :entries, dependent: :destroy

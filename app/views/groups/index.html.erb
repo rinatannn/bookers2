@@ -1,0 +1,56 @@
+<div class="container px-5 px-sm-0 mt-3">
+  <div class="row">
+
+    <div class="col-md-3">
+      <h2>User info</h2>
+      <%= render "users/info", user: @user, book: Book.new %>
+    </div>
+
+    <div class="col-md-8 offset-md-1">
+      <h2>Groups</h2>
+
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Group name</th>
+            <th>Introduction</th>
+            <th>Owner</th>
+            <th>Members</th>
+            <th></th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <% @groups.each do |group| %>
+            <tr>
+              <td>
+                <%= link_to group.name, group_path(group) %>
+              </td>
+
+              <td>
+                <%= group.introduction %>
+              </td>
+
+              <td>
+                <%= group.owner.name %>
+              </td>
+
+              <td>
+                <%= group.users.count %>
+              </td>
+
+              <td>
+                <% if group.owner == current_user %>
+                  <%= link_to "Edit", edit_group_path(group), class: "btn btn-success btn-sm" %>
+                <% end %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+
+      <%= link_to "Create Group", new_group_path, class: "btn btn-success" %>
+    </div>
+
+  </div>
+</div>
