@@ -26,5 +26,11 @@ Rails.application.routes.draw do
       get :followings
       get :followers
     end
+
+    resources :rooms, only: [:create]
+  end
+
+  resources :rooms, only: [:show] do
+    resources :messages, only: [:create]
   end
 end

@@ -1,0 +1,37 @@
+<div class="container mt-4">
+  <div class="row">
+    <div class="col-md-8 mx-auto">
+
+      <h2>DM</h2>
+
+      <div class="messages mb-4">
+        <% @messages.each do |message| %>
+          <div class="mb-2">
+            <strong><%= message.user.name %></strong>
+            <%= message.message %>
+          </div>
+        <% end %>
+      </div>
+
+      <%= form_with model: [@room, @message] do |f| %>
+        <% if @message.errors.any? %>
+          <div class="alert alert-danger">
+            <% @message.errors.full_messages.each do |error| %>
+              <div><%= error %></div>
+            <% end %>
+          </div>
+        <% end %>
+
+        <div class="form-group">
+          <%= f.text_area :message,
+                          class: "form-control",
+                          maxlength: 140,
+                          placeholder: "メッセージを入力（140文字まで）" %>
+        </div>
+
+        <%= f.submit "送信", class: "btn btn-success mt-2" %>
+      <% end %>
+
+    </div>
+  </div>
+</div>

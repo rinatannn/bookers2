@@ -3,12 +3,21 @@ class BooksController < ApplicationController
   before_action :ensure_correct_user, only: [:edit, :update, :destroy]
 
   def index
-    @books = Book.all
-    @book = Book.new
-  end
+  @books = Book
+    .left_joins(:favorites)
+    .group("books.id")
+    .order(
+      Arel.sql(
+        "SUM(CASE WHEN favorites.created_at >= '#{1.week.ago.to_fs(:db)}' THEN 1 ELSE 0 END) DESC"
+      )
+    )
+
+  @book = Book.new
+end
 
   def show
-    @book = Book.find(params[:id])
+  @book = Book.find(params[:id])
+  @book.increment!(:view_count)
   end
 
   def edit

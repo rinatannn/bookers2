@@ -1,11 +1,79 @@
+<div class="container">
+  <div class="row">
+    <div class="col-md-3">
+      <%= render 'books/list', user: @book.user, book: Book.new %>
+    </div>
+
+    <div class="col-md-8 offset-md-1">
+      <h2>Book detail</h2>
+
+      <table class="table">
+        <tbody>
+          <tr>
+            <td>
+              <%= link_to user_path(@book.user) do %>
+                <% if @book.user.profile_image.attached? %>
+                  <%= image_tag @book.user.profile_image, size: "40x40" %><br>
+                <% else %>
+                  <%= image_tag "no_image.svg", size: "40x40" %><br>
+                <% end %>
+
+                <%= @book.user.name %>
+              <% end %>
+            </td>
+
+            <td>
+              <%= link_to @book.title, book_path(@book) %>
+            </td>
+
+            <td>
+              <%= @book.body %>
+            </td>
+
+            <td>
+              <%= turbo_frame_tag dom_id(@book, :favorite) do %>
+                <%= render "favorites/favorite_btn", book: @book %>
+              <% end %>
+            </td>
+
+            <td>
+              コメント数: <%= @book.book_comments.count %>
+            </td>
+
+            <td>
+              閲覧数: <%= @book.view_count %>
+            </td>
+
+            <% if @book.user == current_user %>
+              <td>
+                <%= link_to "Edit",
+                            edit_book_path(@book),
+                            class: "btn btn-sm btn-success" %>
+              </td>
+
+              <td>
+                <%= link_to "Destroy",
+                            book_path(@book),
+                            data: {
+                              turbo_method: :delete,
+                              turbo_confirm: "本当に消しますか？"
+                            },
+                            class: "btn btn-sm btn-danger" %>
+              </td>
+            <% end %>
+          </tr>
+        </tbody>
+      </table>
+
       <div id="book-comments">
         <%= render "book_comments/index", book: @book %>
       </div>
 
       <div id="new-comment">
-        <%= render "book_comments/form", book: @book, book_comment: BookComment.new %>
+        <%= render "book_comments/form",
+                   book: @book,
+                   book_comment: BookComment.new %>
       </div>
-
     </div>
   </div>
 </div>
