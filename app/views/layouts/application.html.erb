@@ -3,6 +3,7 @@
   <head>
     <title>Bookers2</title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
+
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
@@ -12,6 +13,9 @@
     >
 
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
     <%= javascript_importmap_tags %>
   </head>
 
@@ -96,7 +100,10 @@
                 <%= f.text_field :word, placeholder: "Search..." %>
 
                 <%= f.select :range,
-                             options_for_select([["User", "User"], ["Book", "Book"]]) %>
+                             options_for_select([
+                               ["User", "User"],
+                               ["Book", "Book"]
+                             ]) %>
 
                 <%= f.select :search,
                              options_for_select([

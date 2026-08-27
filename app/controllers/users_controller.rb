@@ -13,6 +13,60 @@ class UsersController < ApplicationController
 
   def show
     @user = User.find(params[:id])
+
+    # 今日の投稿数
+    @today_book_count =
+      @user.books.where(created_at: Time.current.all_day).count
+
+    # 昨日の投稿数
+    @yesterday_book_count =
+      @user.books.where(created_at: 1.day.ago.all_day).count
+
+    # 今日と昨日の投稿数の比較
+    @day_comparison =
+      if @yesterday_book_count.zero?
+        0
+      else
+        (@today_book_count.to_f / @yesterday_book_count * 100).round
+      end
+
+      def search_count
+    @user = User.find(params[:id])
+    @date = Date.parse(params[:date])
+    @book_count = @user.books.where(created_at: @date.all_day).count
+
+     respond_to do |format|
+    format.turbo_stream
+      end
+     end
+
+    # 今週：今日を含む過去7日間
+    @this_week_book_count =
+      @user.books.where(
+        created_at: 6.days.ago.beginning_of_day..Time.current.end_of_day
+      ).count
+
+    # 先週：その前の7日間
+    @last_week_book_count =
+      @user.books.where(
+        created_at: 13.days.ago.beginning_of_day..7.days.ago.end_of_day
+      ).count
+
+    # 今週と先週の比較
+    @week_comparison =
+      if @last_week_book_count.zero?
+        0
+      else
+        (@this_week_book_count.to_f / @last_week_book_count * 100).round
+      end
+
+    # 過去7日間の日付
+    @dates = (6.days.ago.to_date..Date.current).to_a
+
+    # 過去7日間の各日の投稿数
+    @daily_book_counts = @dates.map do |date|
+      @user.books.where(created_at: date.all_day).count
+    end
   end
 
   def index

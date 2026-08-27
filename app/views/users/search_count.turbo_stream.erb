@@ -1,0 +1,6 @@
+<%= turbo_stream.update "search-count-result" do %>
+  <div class="alert alert-info">
+    <%= @date.strftime("%Y/%m/%d") %> の投稿数：
+    <strong><%= @book_count %>件</strong>
+  </div>
+<% end %>

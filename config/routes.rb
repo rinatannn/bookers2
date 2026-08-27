@@ -25,6 +25,7 @@ Rails.application.routes.draw do
     member do
       get :followings
       get :followers
+      get :search_count
     end
 
     resources :rooms, only: [:create]
