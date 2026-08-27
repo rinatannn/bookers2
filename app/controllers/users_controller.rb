@@ -1,5 +1,5 @@
 class UsersController < ApplicationController
-  before_action :authenticate_user!, only: [:index, :show, :edit, :update]
+  before_action :authenticate_user!, only: [:index, :show, :edit, :update, :followings, :followers]
   before_action :is_matching_login_user, only: [:edit, :update]
 
   def sessions
@@ -19,6 +19,16 @@ class UsersController < ApplicationController
     @users = User.all
     @user = current_user
     @book = Book.new
+  end
+
+  def followings
+    @user = User.find(params[:id])
+    @users = @user.followings
+  end
+
+  def followers
+    @user = User.find(params[:id])
+    @users = @user.followers
   end
 
   def create

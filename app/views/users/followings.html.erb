@@ -1,0 +1,52 @@
+<div class="container mt-3">
+  <h2>Follow Users</h2>
+
+  <% if @users.exists? %>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>image</th>
+          <th>name</th>
+          <th>follows</th>
+          <th>followers</th>
+          <th></th>
+          <th></th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <% @users.each do |user| %>
+          <tr>
+            <td>
+              <% if user.profile_image.attached? %>
+                <%= image_tag user.profile_image, size: "40x40" %>
+              <% else %>
+                <%= image_tag "no_image.svg", size: "40x40" %>
+              <% end %>
+            </td>
+
+            <td><%= user.name %></td>
+
+            <td>
+              <%= link_to user.followings.count, followings_user_path(user) %>
+            </td>
+
+            <td>
+              <%= link_to user.followers.count, followers_user_path(user) %>
+            </td>
+
+            <td>
+              <%= render "users/follow_btn", user: user %>
+            </td>
+
+            <td>
+              <%= link_to "Show", user_path(user) %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  <% else %>
+    <p>ユーザーはいません</p>
+  <% end %>
+</div>
