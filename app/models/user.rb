@@ -46,6 +46,18 @@ class User < ApplicationRecord
     followings.include?(user)
   end
 
+  def self.looks(search, word)
+    if search == "perfect_match"
+      where("name LIKE ?", word)
+    elsif search == "forward_match"
+      where("name LIKE ?", "#{word}%")
+    elsif search == "backward_match"
+      where("name LIKE ?", "%#{word}")
+    else
+      where("name LIKE ?", "%#{word}%")
+    end
+  end
+
   def email_address
     self[:email_address].presence || email
   end

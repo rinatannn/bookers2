@@ -12,17 +12,19 @@ Rails.application.routes.draw do
   get "/users/sign_up", to: "users#registrations", as: :new_user_registration
   get "/users/sign_up", to: "users#registrations", as: :new_user
 
+  get "/search", to: "searches#search", as: :search
+
   resources :books, only: [:index, :show, :edit, :create, :update, :destroy] do
     resource :favorite, only: [:create, :destroy]
     resources :book_comments, only: [:create, :destroy]
   end
 
   resources :users, only: [:index, :show, :create, :edit, :update] do
-  resource :relationships, only: [:create, :destroy]
+    resource :relationships, only: [:create, :destroy]
 
-  member do
-    get :followings
-    get :followers
+    member do
+      get :followings
+      get :followers
+    end
   end
-end
 end
