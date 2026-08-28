@@ -1,0 +1,30 @@
+<div class="container px-5 px-sm-0 mt-3">
+  <div class="row">
+
+    <div class="col-md-3">
+      <h2>User info</h2>
+      <%= render "users/info", user: @user, book: Book.new %>
+    </div>
+
+    <div class="col-md-8 offset-md-1">
+      <h2>送信が完了しました</h2>
+
+      <table class="table">
+        <tr>
+          <th>Title</th>
+          <td><%= @title %></td>
+        </tr>
+
+        <tr>
+          <th>Body</th>
+          <td><%= simple_format(@body) %></td>
+        </tr>
+      </table>
+
+      <%= link_to "Back to Group",
+                  group_path(@group),
+                  class: "btn btn-secondary" %>
+    </div>
+
+  </div>
+</div>

@@ -25,6 +25,11 @@ Rails.application.routes.draw do
  # グループ
 resources :groups do
   resource :group_users, only: [:create, :destroy]
+
+  member do
+    get :new_mail
+    post :send_mail
+  end
 end
 
   # ユーザー
