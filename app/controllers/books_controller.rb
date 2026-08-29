@@ -3,7 +3,15 @@ class BooksController < ApplicationController
   before_action :ensure_correct_user, only: [:edit, :update, :destroy]
 
   def index
-    @books = Book
+  @books = Book.all
+
+  case params[:sort]
+  when "new"
+    @books = @books.order(created_at: :desc)
+  when "rating"
+    @books = @books.order(score: :desc)
+  else
+    @books = @books
       .left_joins(:favorites)
       .group("books.id")
       .order(
@@ -11,9 +19,10 @@ class BooksController < ApplicationController
           "SUM(CASE WHEN favorites.created_at >= '#{1.week.ago.to_fs(:db)}' THEN 1 ELSE 0 END) DESC"
         )
       )
-
-    @book = Book.new
   end
+
+  @book = Book.new
+end
 
   def show
     @book = Book.find(params[:id])
