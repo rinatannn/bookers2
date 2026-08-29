@@ -2,27 +2,33 @@ class BooksController < ApplicationController
   before_action :authenticate_user!
   before_action :ensure_correct_user, only: [:edit, :update, :destroy]
 
-  def index
-  @books = Book.all
-
-  case params[:sort]
-  when "new"
-    @books = @books.order(created_at: :desc)
-  when "rating"
-    @books = @books.order(score: :desc)
+  
+def index
+  if params[:category].present?
+    @books = Book.where(category: params[:category])
   else
-    @books = @books
-      .left_joins(:favorites)
-      .group("books.id")
-      .order(
-        Arel.sql(
-          "SUM(CASE WHEN favorites.created_at >= '#{1.week.ago.to_fs(:db)}' THEN 1 ELSE 0 END) DESC"
+    @books = Book.all
+
+    case params[:sort]
+    when "new"
+      @books = @books.order(created_at: :desc)
+    when "rating"
+      @books = @books.order(score: :desc)
+    else
+      @books = @books
+        .left_joins(:favorites)
+        .group("books.id")
+        .order(
+          Arel.sql(
+            "SUM(CASE WHEN favorites.created_at >= '#{1.week.ago.to_fs(:db)}' THEN 1 ELSE 0 END) DESC"
+          )
         )
-      )
+    end
   end
 
   @book = Book.new
 end
+  
 
   def show
     @book = Book.find(params[:id])
@@ -65,13 +71,13 @@ end
 
   private
 
-  def book_create_params
-    params.require(:book).permit(:title, :body, :score)
-  end
+   def book_create_params
+  params.require(:book).permit(:title, :body, :score, :category)
+end
 
   def book_update_params
-    params.require(:book).permit(:title, :body)
-  end
+  params.require(:book).permit(:title, :body, :category)
+end
 
   def ensure_correct_user
     book = Book.find(params[:id])

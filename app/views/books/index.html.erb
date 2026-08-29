@@ -31,11 +31,9 @@
           <tr>
             <th></th>
             <th>Title</th>
-            <th>Opinion</th>
-            <th>Rating</th>
-            <th>Favorite</th>
-            <th>Comments</th>
-            <th>View Count</th>
+<th>Opinion</th>
+<th>Category</th>
+<th>Rating</th>
           </tr>
         </thead>
 
@@ -59,6 +57,12 @@
               <td>
                 <%= book.body %>
               </td>
+
+              <td>
+  <% if book.category.present? %>
+    <%= link_to book.category, books_path(category: book.category) %>
+  <% end %>
+</td>
 
               <td>
                 <% if book.score.present? %>
