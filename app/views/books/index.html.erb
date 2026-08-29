@@ -28,6 +28,7 @@
             <th></th>
             <th>Title</th>
             <th>Opinion</th>
+            <th>Rating</th>
             <th>Favorite</th>
             <th>Comments</th>
             <th>View Count</th>
@@ -53,6 +54,15 @@
 
               <td>
                 <%= book.body %>
+              </td>
+
+              <td>
+                <% if book.score.present? %>
+                  <div
+                    class="book-rating"
+                    data-score="<%= book.score %>">
+                  </div>
+                <% end %>
               </td>
 
               <td>

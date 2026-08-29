@@ -73,6 +73,11 @@
         </div>
 
         <div class="form-group">
+          <label>Rating</label>
+          <div id="post_raty"></div>
+        </div>
+
+        <div class="form-group">
           <%= f.submit "Create Book", class: "btn btn-success" %>
         </div>
       <% end %>
@@ -87,6 +92,7 @@
             <th></th>
             <th>Title</th>
             <th>Opinion</th>
+            <th>Rating</th>
             <th>Comments</th>
           </tr>
         </thead>
@@ -113,13 +119,21 @@
               </td>
 
               <td>
+                <% if book.score.present? %>
+                  <div
+                    class="book-rating"
+                    data-score="<%= book.score %>">
+                  </div>
+                <% end %>
+              </td>
+
+              <td>
                 コメント数: <%= book.book_comments.count %>
               </td>
             </tr>
           <% end %>
         </tbody>
       </table>
-
 
       <!-- record-1 -->
       <h2 class="mt-4">投稿数の比較</h2>
@@ -174,7 +188,6 @@
         </tbody>
       </table>
 
-
       <!-- record-2 -->
       <h2 class="mt-4">過去7日間の投稿数</h2>
 
@@ -200,7 +213,6 @@
         <canvas id="bookChart"></canvas>
       </div>
 
-
       <!-- record-3 -->
       <h2 class="mt-5">指定日の投稿数</h2>
 
@@ -223,7 +235,6 @@
     </div>
   </div>
 </div>
-
 
 <script>
   document.addEventListener("turbo:load", function() {

@@ -31,6 +31,15 @@
             </td>
 
             <td>
+  <% if @book.score.present? %>
+    <div
+      class="book-rating"
+      data-score="<%= @book.score %>">
+    </div>
+  <% end %>
+</td>
+
+            <td>
               <%= turbo_frame_tag dom_id(@book, :favorite) do %>
                 <%= render "favorites/favorite_btn", book: @book %>
               <% end %>

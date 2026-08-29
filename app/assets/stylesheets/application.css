@@ -8,3 +8,21 @@
  *
  * Consider organizing styles into separate files for maintainability.
  */
+.star-off::before {
+  content: "☆";
+  font-size: 24px;
+}
+
+.star-on::before {
+  content: "★";
+  font-size: 24px;
+}
+
+#post_raty i {
+  cursor: pointer;
+  font-style: normal;
+}
+
+.book-rating i {
+  font-style: normal;
+}
