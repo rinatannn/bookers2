@@ -19,6 +19,8 @@ Rails.application.routes.draw do
   # 検索
   get "/search", to: "searches#search", as: :search
 
+  resources :notifications, only: [:update]
+  
   # 投稿
   resources :books, only: [:index, :show, :edit, :create, :update, :destroy] do
     resource :favorite, only: [:create, :destroy]
