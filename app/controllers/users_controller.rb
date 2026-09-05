@@ -1,6 +1,12 @@
 class UsersController < ApplicationController
-  before_action :authenticate_user!, only: [:index, :show, :edit, :update, :followings, :followers]
-  before_action :is_matching_login_user, only: [:edit, :update]
+  before_action :authenticate_user!,
+                only: [:index, :show, :edit, :update, :followings, :followers]
+
+  before_action :is_matching_login_user,
+                only: [:edit, :update]
+
+  before_action :ensure_guest_user,
+                only: [:edit, :update]
 
   def sessions
     render :sessions
@@ -29,16 +35,6 @@ class UsersController < ApplicationController
       else
         (@today_book_count.to_f / @yesterday_book_count * 100).round
       end
-
-      def search_count
-    @user = User.find(params[:id])
-    @date = Date.parse(params[:date])
-    @book_count = @user.books.where(created_at: @date.all_day).count
-
-     respond_to do |format|
-    format.turbo_stream
-      end
-     end
 
     # 今週：今日を含む過去7日間
     @this_week_book_count =
@@ -69,6 +65,16 @@ class UsersController < ApplicationController
     end
   end
 
+  def search_count
+    @user = User.find(params[:id])
+    @date = Date.parse(params[:date])
+    @book_count = @user.books.where(created_at: @date.all_day).count
+
+    respond_to do |format|
+      format.turbo_stream
+    end
+  end
+
   def index
     @users = User.all
     @user = current_user
@@ -90,6 +96,7 @@ class UsersController < ApplicationController
 
     if @user.save
       session[:user_id] = @user.id
+
       redirect_to user_path(@user),
                   notice: "Welcome! You have signed up successfully."
     else
@@ -105,7 +112,7 @@ class UsersController < ApplicationController
     @user = User.find(params[:id])
 
     if @user.update(user_params)
-      redirect_to user_path(@user.id),
+      redirect_to user_path(@user),
                   notice: "You have updated user successfully."
     else
       render :edit
@@ -131,6 +138,15 @@ class UsersController < ApplicationController
 
     unless user.id == current_user.id
       redirect_to user_path(current_user)
+    end
+  end
+
+  def ensure_guest_user
+    user = User.find(params[:id])
+
+    if user.guest_user?
+      redirect_to user_path(current_user),
+                  notice: "ゲストユーザーはプロフィール編集画面へ遷移できません。"
     end
   end
 end

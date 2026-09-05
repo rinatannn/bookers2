@@ -1,6 +1,8 @@
 class User < ApplicationRecord
   has_secure_password
 
+  GUEST_USER_EMAIL = "guest@example.com"
+
   has_many :books, dependent: :destroy
   has_many :favorites, dependent: :destroy
   has_many :favorite_books, through: :favorites, source: :book
@@ -43,6 +45,17 @@ class User < ApplicationRecord
             length: { minimum: 2, maximum: 20 }
 
   validates :introduction, length: { maximum: 50 }
+
+  def self.guest
+    find_or_create_by!(email: GUEST_USER_EMAIL) do |user|
+      user.password = SecureRandom.urlsafe_base64
+      user.name = "guestuser"
+    end
+  end
+
+  def guest_user?
+    email == GUEST_USER_EMAIL
+  end
 
   def follow(user)
     active_relationships.create(followed_id: user.id)
